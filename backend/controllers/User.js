@@ -4,7 +4,7 @@ const bcrypt = require("bcrypt");
 
 
 const generateToken = (user) => {
-  return jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: "1h" });
+  return jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: "5s" });
 };
 
 
@@ -55,7 +55,6 @@ const login = async (req, res) => {
     if (!isMatch) {
       return res.status(400).json({ error: "Invalid email or password" });
     }
-
     
     const token = generateToken(user);
 
