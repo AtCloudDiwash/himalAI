@@ -10,7 +10,7 @@ import blockIcon from "./../../assets/more_icons/block_icon.svg";
 import exploreIcon from "./../../assets/more_icons/explore_icon.svg";
 import shareIcon from "./../../assets/more_icons/share_button.svg";
 import clockIcon from "./../../assets/more_icons/clock_icon.svg";
-
+import { useBlockchainContext } from "../../context/BlockchainContext";
 
 const sidebarVariants = {
   hidden: { x: "-100%", opacity: 0 },
@@ -70,13 +70,18 @@ const RecentTransactions = memo(() => (
 ));
 
 function Sidebar({ onClose }) {
-  const navigate = useNavigate();
-  const [isBlockchainMode, setIsBlockchainMode] = useState(false); 
+const {
+  blockchainMode: isBlockchainMode,
+  updateBlockchainMode: setIsBlockchainMode,
+} = useBlockchainContext();
 
-  const handleToggleStorage = () => {
-    setIsBlockchainMode((prev) => !prev);
-    navigate('/');
-  };
+  const navigate = useNavigate();
+  // const [isBlockchainMode, setIsBlockchainMode] = useState(false); 
+
+const handleToggleStorage = () => {
+  setIsBlockchainMode(); // Call the context function directly
+  navigate("/");
+};
 
   
 
@@ -102,7 +107,7 @@ function Sidebar({ onClose }) {
       <div className={styles.sidebar__add}>
         <button
           className={styles.sidebar__addBtn}
-          onClick={() => navigate("/addmemory")}
+          onClick={() => {!isBlockchainMode?navigate("/addmemory"):navigate("/addblock")}}
         >
           <img src={addIcon} alt="plus icon" />
           Add Your Memory
