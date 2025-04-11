@@ -4,7 +4,7 @@ import Navbar from "../components/navbar/Navbar";
 import ParticleNebula from "../components/spline/ParticleNebula";
 import AddMemory from "./AddMemory";
 import ExploreMemories from "./ExploreMemories";
-import { Routes, Route, useLocation } from "react-router-dom";
+import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import LandingPage from "./landingPage/LandingPage";
 import Signup from "./signup/Signup";
 import Login from "./login/Login";
@@ -13,6 +13,12 @@ export default function Dashboard() {
   const location = useLocation();
   const hideNavbarRoutes = ["/landing", "/signup", "/login"];
   const shouldHideNavbar = hideNavbarRoutes.includes(location.pathname);
+  const token = localStorage.getItem("token");
+  const isLoggedIn = Boolean(token); 
+
+  const ProtectedRoute = ({ children }) => {
+    return isLoggedIn ? children : <Navigate to="/login" replace />;
+  };
 
   return (
     <div className={styles.wrapper}>
@@ -41,10 +47,17 @@ export default function Dashboard() {
         size="350px"
         backgroundColor="#EC36C4"
       />
-
+  
       <Routes>
         <Route path="/" element={<ParticleNebula />} />
-        <Route path="/addmemory" element={<AddMemory />} />
+        <Route
+          path="/addmemory"
+          element={
+            <ProtectedRoute>
+              <AddMemory />
+            </ProtectedRoute>
+          }
+        />
         <Route path="/landing" element={<LandingPage />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
