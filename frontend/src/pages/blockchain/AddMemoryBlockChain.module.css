@@ -1,0 +1,122 @@
+.addMemoryBlockchain {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--color-darkblue), #1A0A3A);
+  padding: var(--universal-pd);
+  font-family: var(--ff-Nunito);
+  color: var(--color-white);
+}
+
+.title {
+  font-size: var(--fs-xl);
+  font-weight: 700;
+  margin-bottom: var(--space-lg);
+  text-align: center;
+}
+
+.form {
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: clamp(10px, 2vw, 15px);
+  padding: clamp(1rem, 3vw, 2rem);
+  width: 100%;
+  max-width: clamp(400px, 50vw, 600px);
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+}
+
+.formGroup {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+}
+
+.label {
+  font-size: var(--fs-md);
+  font-weight: 500;
+  color: var(--color-white);
+}
+
+.input {
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: var(--btn-radius);
+  padding: var(--btn-padding);
+  color: var(--color-white);
+  font-size: var(--fs-md);
+  font-family: var(--ff-Nunito);
+  transition: border-color 0.3s;
+}
+
+.input:focus {
+  outline: none;
+  border-color: var(--color-primary1);
+}
+
+.input::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+.input[type="file"] {
+  padding: var(--space-sm);
+}
+
+.submitBtn {
+  background: linear-gradient(90deg, var(--color-primary1), var(--color-primary2));
+  color: var(--color-white);
+  padding: var(--btn-padding);
+  border-radius: var(--btn-radius);
+  border: none;
+  font-size: var(--fs-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s, transform 0.2s;
+}
+
+.submitBtn:hover {
+  background: linear-gradient(90deg, var(--color-primary2), var(--color-primary1));
+  transform: translateY(-2px);
+}
+
+.submitBtn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  transform: none;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .title {
+    font-size: var(--fs-lg);
+  }
+
+  .form {
+    padding: clamp(0.75rem, 2vw, 1.5rem);
+    max-width: 90%;
+  }
+
+  .submitBtn {
+    width: 100%;
+  }
+}
+
+@media (max-width: 480px) {
+  .title {
+    font-size: var(--fs-md);
+  }
+
+  .form {
+    max-width: 100%;
+  }
+
+  .input {
+    font-size: var(--fs-sm);
+  }
+
+  .label {
+    font-size: var(--fs-sm);
+  }
+}

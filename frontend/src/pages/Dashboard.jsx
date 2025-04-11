@@ -8,6 +8,7 @@ import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import LandingPage from "./landingPage/LandingPage";
 import Signup from "./signup/Signup";
 import Login from "./login/Login";
+import AddMemoryBlockChain from "./blockchain/AddMemoryBlockChain";
 
 export default function Dashboard() {
   const location = useLocation();
@@ -60,6 +61,7 @@ export default function Dashboard() {
         <Route path="/landing" element={<LandingPage />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/addblock" element={<AddMemoryBlockChain />} />
       </Routes>
     </div>
   );
