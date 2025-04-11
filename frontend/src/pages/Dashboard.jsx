@@ -2,7 +2,7 @@ import styles from "./Dashboard.module.css";
 import FloatingBlob from "../components/floatingBlob/FloatingBlob";
 import Navbar from "../components/navbar/Navbar";
 import ParticleNebula from "../components/spline/ParticleNebula";
-import AddMemory from "./AddMemory";
+import AddMemory from "./normalStorage/AddMemory";
 import ExploreMemories from "./ExploreMemories";
 import { Routes, Route, useLocation, Navigate } from "react-router-dom";
 import LandingPage from "./landingPage/LandingPage";

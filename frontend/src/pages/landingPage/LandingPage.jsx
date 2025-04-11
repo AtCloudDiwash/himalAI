@@ -2,7 +2,7 @@ import React, { useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import styles from "./LandingPage.module.css";
 import ParticleNebula from "./../../components/spline/ParticleNebula";
-// import { AuthContext } from "./../../context/AuthContext"; adjust path if needed
+// import { AuthContext } from "./../../context/AuthContext"; adjust path if needed - just in case
 
 const LandingPage = () => {
   const navigate = useNavigate();
