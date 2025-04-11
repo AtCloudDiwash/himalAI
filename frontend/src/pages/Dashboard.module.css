@@ -1,0 +1,14 @@
+.wrapper{
+    width: 100%;
+    height: 100vh;
+      position: relative;
+  overflow: hidden;
+    background-color: #070314;
+}
+
+
+nav,
+.floatingBlob {
+  position: relative;
+  z-index: 1;
+}

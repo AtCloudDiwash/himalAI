@@ -1,0 +1,78 @@
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  width: 100%;
+  height: 5rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 clamp(1rem, 4vw, 3.5rem);
+  z-index: 1000;
+  box-shadow: 0 9px clamp(1rem, 5vw, 3rem) rgba(0, 0, 0, 0.3);
+  backdrop-filter: blur(1rem);
+}
+
+.leftSection {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  flex: 0.7;
+  gap: clamp(0.8rem, 1.5vw, 2rem);
+}
+
+.rightSection {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-end;
+  align-items: center;
+  flex: 0.3;
+  gap: var(--gap-sm);
+}
+
+.title {
+  color: var(--color-white);
+  cursor: pointer;
+  font-family: var(--ff-Nunito);
+  margin: 0;
+  line-height: 1;
+  display: inline-flex;
+  align-items: center;
+  transition: transform .2s ease-in-out;
+}
+
+.title:hover{
+  opacity: .9;
+}
+.title:active{
+  transform: scale(.95);
+  opacity: .9;
+}
+
+.helpText {
+  color: var(--color-white);
+  cursor: pointer;
+  opacity: 0.8;
+  font-size: clamp(1rem, 1vw, 1.6rem);
+  font-family: var(--ff-Inter);
+  letter-spacing: 1px;
+}
+
+.avatar img {
+  width: clamp(2rem, 3vw, 3.5rem);
+  height: clamp(2rem, 3vw, 3.5rem);
+}
+
+.toggleIcon {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+
+.toggleIcon img {
+  height: var(--fs-xl);
+  width: var(--fs-xl);
+}

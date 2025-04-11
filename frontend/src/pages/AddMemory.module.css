@@ -1,0 +1,277 @@
+.wrapper {
+  width: 100%;
+  height: 100vh;
+  padding-bottom: var(--universal-pd);
+  overflow: auto;
+  display: flex;
+  align-items: center;
+}
+
+.addMemory {
+  position: relative;
+  background: transparent;
+  padding: var(--universal-pd);
+  border-radius: 20px;
+  color: var(--color-white);
+  width: 100%;
+  max-width: clamp(300px, 80vw, 600px);
+  z-index: 2;
+  border: 1px solid transparent;
+  background-clip: padding-box;
+  box-shadow: 0 0 10px rgba(107, 136, 255, 0.2);
+  font-family: var(--ff-Nunito);
+  margin: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  margin-top: 6rem;
+  contain: layout;
+  will-change: transform, opacity;
+}
+
+.addMemory::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  backdrop-filter: blur(1rem);
+  z-index: -1;
+  border-radius: 20px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-lg);
+}
+
+.header h2 {
+  font-size: var(--fs-lg);
+  font-weight: 700;
+  color: var(--color-white);
+  text-align: center;
+  flex: 1;
+}
+
+.formField {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-lg);
+}
+
+.formField label {
+  font-size: var(--fs-md);
+  font-weight: 600;
+  color: var(--color-white);
+}
+
+.formField input,
+.formField textarea {
+  width: 100%;
+  padding: var(--space-md);
+  border-radius: var(--btn-radius);
+  border: 1px solid var(--color-primary1);
+  background: var(--color-darkblue);
+  color: var(--color-white);
+  font-size: var(--fs-md);
+  font-family: var(--ff-Nunito);
+}
+
+.formField input:focus,
+.formField textarea:focus {
+  border-color: var(--color-primary2);
+  outline: none;
+}
+
+.formField textarea {
+  min-height: clamp(80px, 15vh, 120px);
+  resize: vertical;
+}
+
+.dateInputWrapper {
+  position: relative;
+}
+
+.dateInputWrapper input {
+  padding-right: clamp(30px, 5vw, 40px);
+}
+
+.calendarIcon {
+  position: absolute;
+  right: var(--space-md);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-primary1);
+  font-size: var(--fs-lg);
+  cursor: pointer;
+}
+
+.uploadButton {
+  background: linear-gradient(90deg, var(--color-primary1), var(--color-primary2));
+  border: none;
+  padding: var(--btn-padding);
+  color: var(--color-white);
+  font-size: var(--fs-md);
+  border-radius: var(--btn-radius);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  margin-bottom: var(--space-md);
+  font-family: var(--ff-Nunito);
+}
+
+.mediaPreview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--gap-sm);
+  contain: paint;
+}
+
+.mediaItem {
+  position: relative;
+  border-radius: var(--btn-radius);
+  border: 1px solid var(--color-primary1);
+  will-change: transform, opacity;
+}
+
+.mediaItem img,
+.mediaItem video {
+  width: clamp(80px, 15vw, 100px);
+  height: clamp(80px, 15vw, 100px);
+  object-fit: cover;
+  display: block;
+}
+
+.mediaItem.audio {
+  width: clamp(150px, 30vw, 200px);
+  height: clamp(30px, 5vw, 40px);
+}
+
+.audioPlayer {
+  width: 100%;
+  height: 100%;
+}
+
+.removeButton {
+  position: absolute;
+  top: calc(-1 * var(--space-sm));
+  right: calc(-1 * var(--space-sm));
+  background: var(--color-darkblue);
+  border: 1px solid var(--color-primary1);
+  border-radius: 50%;
+  width: clamp(16px, 2vw, 20px);
+  height: clamp(16px, 2vw, 20px);
+  color: var(--color-white);
+  font-size: var(--fs-xs);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.removeButton img {
+  width: clamp(16px, 2vw, 20px);
+  height: clamp(16px, 2vw, 20px);
+}
+
+.voiceNoteWrapper {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  margin-top: var(--space-md);
+}
+
+.recordButton {
+  background: linear-gradient(90deg, var(--color-primary1), var(--color-primary2));
+  border: none;
+  border-radius: 50%;
+  width: clamp(32px, 5vw, 40px);
+  height: clamp(32px, 5vw, 40px);
+  color: var(--color-white);
+  font-size: clamp(16px, 2vw, 20px);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.recordButton.recording {
+  background: #ff4444;
+}
+
+.recordLabel {
+  font-size: var(--fs-md);
+  color: var(--color-white);
+  font-family: var(--ff-Nunito);
+}
+
+.toggleField {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-top: var(--space-lg);
+}
+
+.toggleField label {
+  font-size: var(--fs-md);
+  font-weight: 600;
+  color: var(--color-white);
+}
+
+.toggleSwitch {
+  width: clamp(40px, 5vw, 50px);
+  height: clamp(20px, 3vw, 24px);
+  background: var(--color-darkblue);
+  border-radius: 12px;
+  position: relative;
+  cursor: pointer;
+  border: 1px solid var(--color-primary1);
+}
+
+.toggleCircle {
+  width: clamp(16px, 2vw, 20px);
+  height: clamp(16px, 2vw, 20px);
+  background: var(--color-white);
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+}
+
+.formButtons {
+  display: flex;
+  gap: var(--gap-sm);
+  justify-content: flex-end;
+  margin-top: var(--space-lg);
+}
+
+.cancelButton {
+  background: transparent;
+  border: 1px solid var(--color-primary1);
+  padding: var(--btn-padding);
+  color: var(--color-white);
+  font-size: var(--fs-md);
+  border-radius: var(--btn-radius);
+  cursor: pointer;
+  font-family: var(--ff-Nunito);
+}
+
+.saveButton {
+  background: linear-gradient(90deg, var(--color-primary1), var(--color-primary2));
+  border: none;
+  padding: var(--btn-padding);
+  color: var(--color-white);
+  font-size: var(--fs-md);
+  border-radius: var(--btn-radius);
+  cursor: pointer;
+  font-family: var(--ff-Nunito);
+}
+
+.moreMedia {
+  color: var(--color-white);
+  font-size: var(--fs-sm);
+  margin-top: var(--space-sm);
+}

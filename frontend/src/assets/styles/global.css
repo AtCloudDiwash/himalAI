@@ -1,0 +1,41 @@
+@import url('https://fonts.googleapis.com/css2?family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap&family=Nunito+Sans:ital,opsz,wght@0,6..12,200..1000;1,6..12,200..1000&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+
+html, body{
+  overflow: hidden;
+}
+
+
+:root{
+  --color-white: #fff;
+  --color-darkblue: #070314;
+  --color-primary1: #6B88FF;
+  --color-primary2: #EC36C4;
+
+  --gap-sm: clamp(0.8rem, 1.5vw, 2rem);
+
+    --fs-xs: clamp(10px, 0.8vw, 12px);
+  --fs-sm: clamp(12px, 1vw, 14px);
+  --fs-md: clamp(14px, 1vw, 16px);
+  --fs-lg: clamp(16px, 1.2vw, 18px);
+  --fs-xl: clamp(18px, 1.5vw, 22px);
+  --universal-pd: clamp(1rem, 4vw, 3.5rem);
+
+    --space-sm: 0.5rem;
+  --space-md: 0.75rem;
+  --space-lg: 1rem;
+
+  /* Button Style */
+  --btn-radius: 10px;
+  --btn-padding: 0.6rem 1rem;
+
+  --ff-Nunito: "Nunito Sans", sans-serif;
+  --ff-Inter: "Inter", sans-serif;
+}
+

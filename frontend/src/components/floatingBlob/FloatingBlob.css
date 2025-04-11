@@ -1,0 +1,12 @@
+/* FloatingBlob.css */
+.floating-blob {
+  /* background: radial-gradient(circle at center, #6B88FF, #EC36C4); */
+  position: absolute;
+  opacity: 0.8;
+  border-radius: 50%;
+  filter: blur(8rem); /* or use clamp for blur if needed */
+  z-index: 0;
+  pointer-events: none;
+  mix-blend-mode: screen; /* Optional for cool overlapping effects */
+  
+}
