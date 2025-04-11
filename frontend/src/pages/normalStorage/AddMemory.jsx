@@ -2,11 +2,11 @@ import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { useState, useRef, useEffect, useCallback, memo } from "react";
 import debounce from "lodash/debounce";
 import styles from "./AddMemory.module.css";
-import calenderIcon from "./../assets/more_icons/calendar_icon.svg";
-import uploadIcon from "./../assets/more_icons/upload_icon.svg";
-import crossIcon from "./../assets/more_icons/cross_icon.svg";
-import micIcon from "./../assets/more_icons/mic_icon.svg";
-import micActiveIcon from "./../assets/more_icons/mic_active_icon.svg";
+import calenderIcon from "./../../assets/more_icons/calendar_icon.svg";
+import uploadIcon from "./../../assets/more_icons/upload_icon.svg";
+import crossIcon from "./../../assets/more_icons/cross_icon.svg";
+import micIcon from "./../../assets/more_icons/mic_icon.svg";
+import micActiveIcon from "./../../assets/more_icons/mic_active_icon.svg";
 
 // Separate RecordingTimer component to isolate timer re-renders
 function RecordingTimer({ isRecording }) {
