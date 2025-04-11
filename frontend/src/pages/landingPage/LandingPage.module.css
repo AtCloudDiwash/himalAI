@@ -1,0 +1,116 @@
+.landingContainer {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+  font-family: var(--ff-Nunito);
+  overflow: hidden;
+  color: var(--color-white);
+}
+
+.nebulaWrapper {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+
+.landingNav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-lg) var(--universal-pd);
+  position: relative;
+  z-index: 2;
+}
+
+.logo {
+  font-size: var(--fs-xl);
+  font-weight: 800;
+}
+
+.navLinks {
+  display: flex;
+  gap: var(--gap-sm);
+}
+
+.navLinks a {
+  text-decoration: none;
+  font-size: var(--fs-md);
+  color: var(--color-white);
+  transition: all .2s ease-in-out;
+}
+
+.btnGradient {
+  background: linear-gradient(to right, var(--color-primary1), var(--color-primary2));
+  padding: var(--btn-padding);
+  border-radius: var(--btn-radius);
+  color: white;
+  font-weight: bold;
+  transition: 0.3s ease;
+  text-decoration: none;
+}
+
+.btnNotGradient {
+  padding: var(--btn-padding);
+  border-radius: var(--btn-radius);
+  color: white;
+  font-weight: bold;
+  transition: 0.3s ease;
+  text-decoration: none;
+  border: 2px solid rgba(255, 255, 255, 0.5); 
+  background: transparent;
+
+}
+
+
+
+.btnGradient:hover,
+.btnOutline:hover {
+  opacity: 0.8;
+}
+
+.btnGradient:active, .btnNotGradient:active{
+    transform: scale(.9);
+}
+
+.landingHero {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  height: calc(100vh - 80px);
+  position: relative;
+  z-index: 2;
+  padding: 0 var(--universal-pd);
+  text-align: left;
+}
+
+.heroContent {
+  max-width: 700px;
+  padding: 0 1rem;
+}
+
+.heroContent h2 {
+  font-size: clamp(2rem, 5vw, 4rem);
+  margin-bottom: var(--space-md);
+}
+
+.heroContent p {
+  font-size: var(--fs-lg);
+  max-width: 600px;
+  margin-bottom: var(--space-lg);
+  opacity: 0.85;
+  text-align: left;
+}
+
+.heroButtons {
+  display: flex;
+  gap: var(--gap-sm);
+  justify-content: flex-start;
+}
+
+
+.nebulaWrapper {
+  position: absolute;
+  inset: 0;
+  opacity: 0.7; 
+  pointer-events: auto; 
+}
