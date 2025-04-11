@@ -22,7 +22,7 @@ export default function Navbar() {
           <div className={styles.toggleIcon} onClick={toggleSidebar}>
             <img src={sidePanelOpen} alt="panel open icon" />
           </div>
-          <h1 className={styles.title} onClick={()=>navigate("/")}>MemoryVault</h1>
+          <h1 className={styles.title} onClick={()=>navigate("/addmemory")}>MemoryVault</h1>
         </div>
         <div className={styles.rightSection}>
           <span className={styles.helpText}>Help</span>

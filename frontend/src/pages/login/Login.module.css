@@ -80,3 +80,22 @@
 .toggleBtn:hover {
   text-decoration: underline;
 }
+
+.error{
+  color: white;
+}
+
+.titleHome{
+  position: absolute;
+  top: var(--space-lg);
+  left: var(--universal-pd);
+    font-size: var(--fs-xl);
+  color: var(--color-white);
+  cursor: pointer;
+  transition: transform .3s ease-in-out;
+  z-index: 100;
+}
+
+.titleHome:hover{
+  transform: scale(.95);
+}

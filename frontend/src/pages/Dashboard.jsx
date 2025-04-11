@@ -49,7 +49,6 @@ export default function Dashboard() {
       />
   
       <Routes>
-        <Route path="/" element={<ParticleNebula />} />
         <Route
           path="/addmemory"
           element={

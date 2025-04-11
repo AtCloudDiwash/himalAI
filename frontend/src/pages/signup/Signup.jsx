@@ -36,6 +36,7 @@ export default function Signup() {
 
   return (
     <div className={styles.authPage}>
+      <h1 className={styles.titleHome} onClick={()=>navigate("/landing")}>MemoryVault</h1>
       <div className={styles.card}>
         <h2 className={styles.title}>Create an Account</h2>
         <form className={styles.form} onSubmit={handleSubmit}>
