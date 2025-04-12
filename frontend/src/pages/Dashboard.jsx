@@ -19,7 +19,7 @@ export default function Dashboard() {
   const token = localStorage.getItem("token");
   const isLoggedIn = Boolean(token);
 
-  const { blockchainMode } = useBlockchainContext(); // 👈 get blockchain mode from context
+  const { blockchainMode } = useBlockchainContext(); 
 
   const ProtectedRoute = ({ children }) => {
     return isLoggedIn ? children : <Navigate to="/login" replace />;

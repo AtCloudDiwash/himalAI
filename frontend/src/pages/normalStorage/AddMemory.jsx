@@ -75,7 +75,6 @@ const MediaItem = memo(({ media, index, onRemove }) => (
 // Main AddMemory component
 function AddMemory({ onClose }) {
   const shouldReduceMotion = useReducedMotion();
-  const [blockchainStorage, setBlockchainStorage] = useState(false);
   const [mediaFiles, setMediaFiles] = useState([]);
   const [isRecording, setIsRecording] = useState(false);
   const fileInputRef = useRef(null);
@@ -324,21 +323,6 @@ function AddMemory({ onClose }) {
                 </motion.button>
                 <RecordingTimer isRecording={isRecording} />
               </div>
-            </motion.div>
-
-            <motion.div variants={inputVariants} className={styles.toggleField}>
-              <label>Copy On Blockchain Storage</label>
-              <motion.div
-                className={styles.toggleSwitch}
-                onClick={() => setBlockchainStorage(!blockchainStorage)}
-                whileHover={{ scale: 1.05 }}
-              >
-                <motion.div
-                  className={styles.toggleCircle}
-                  animate={{ x: blockchainStorage ? 20 : 0 }}
-                  transition={{ type: "spring", stiffness: 200 }}
-                />
-              </motion.div>
             </motion.div>
 
             <div className={styles.formButtons}>
