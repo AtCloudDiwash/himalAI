@@ -10,7 +10,7 @@ import Signup from "./signup/Signup";
 import Login from "./login/Login";
 import AddMemoryBlockChain from "./blockchain/AddMemoryBlockChain";
 import BlockMemoriesFetch from "./../feature/BlockMemoriesFetch";
-import { useBlockchainContext } from "../context/BlockchainContext"; 
+import { useBlockchainContext } from "../context/BlockchainContext";
 import AIResponse from "./AIResponse/AIResponse";
 
 export default function Dashboard() {
@@ -20,7 +20,7 @@ export default function Dashboard() {
   const token = localStorage.getItem("token");
   const isLoggedIn = Boolean(token);
 
-  const { blockchainMode } = useBlockchainContext(); 
+  const { blockchainMode } = useBlockchainContext();
 
   const ProtectedRoute = ({ children }) => {
     return isLoggedIn ? children : <Navigate to="/login" replace />;
@@ -58,15 +58,39 @@ export default function Dashboard() {
           path="/addmemory"
           element={
             <ProtectedRoute>
-              {blockchainMode ? <AddMemoryBlockChain /> : <AddMemory />}
+              {blockchainMode ? (
+                <Navigate to="/addblock" replace />
+              ) : (
+                <AddMemory />
+              )}
             </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/addblock"
+          element={
+            <ProtectedRoute>
+              {blockchainMode ? (
+                <AddMemoryBlockChain />
+              ) : (
+                <Navigate to="/addmemory" replace />
+              )}
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/explore"
+          element={
+            blockchainMode ? (
+              <BlockMemoriesFetch />
+            ) : (
+              <Navigate to="/" replace />
+            )
           }
         />
         <Route path="/" element={<LandingPage />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
-        <Route path="/addblock" element={<AddMemoryBlockChain />} />
-        <Route path="/explore" element={<BlockMemoriesFetch/>} />
         <Route path="/ai" element={<AIResponse />} />
       </Routes>
     </div>
