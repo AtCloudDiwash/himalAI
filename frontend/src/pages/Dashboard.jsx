@@ -10,7 +10,8 @@ import Signup from "./signup/Signup";
 import Login from "./login/Login";
 import AddMemoryBlockChain from "./blockchain/AddMemoryBlockChain";
 import BlockMemoriesFetch from "./../feature/BlockMemoriesFetch";
-import { useBlockchainContext } from "../context/BlockchainContext"; // 👈 import your context
+import { useBlockchainContext } from "../context/BlockchainContext"; 
+import AIResponse from "./AIResponse/AIResponse";
 
 export default function Dashboard() {
   const location = useLocation();
@@ -66,6 +67,7 @@ export default function Dashboard() {
         <Route path="/login" element={<Login />} />
         <Route path="/addblock" element={<AddMemoryBlockChain />} />
         <Route path="/explore" element={<BlockMemoriesFetch/>} />
+        <Route path="/ai" element={<AIResponse />} />
       </Routes>
     </div>
   );
