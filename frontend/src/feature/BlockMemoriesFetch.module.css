@@ -1,0 +1,179 @@
+.container {
+  padding: var(--universal-pd);
+  max-width: 800px;
+  margin: 0 auto;
+  font-family: var(--ff-Nunito);
+  background: linear-gradient(135deg, #070314 0%, #1a0d3a 100%);
+  color: var(--color-white);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100vh; /* Take full viewport height */
+  overflow-y: auto; /* Allow vertical scrolling */
+  padding-bottom: var(--space-lg); /* Add padding to ensure last item isn’t cut off */
+}
+
+.title {
+  font-size: var(--fs-xl);
+  font-weight: 600;
+  color: var(--color-white);
+  margin-bottom: var(--space-lg);
+  text-align: center;
+}
+
+.connectWalletBtn {
+  display: block;
+  margin: 0 auto;
+  padding: var(--btn-padding);
+  font-size: var(--fs-md);
+  font-weight: 500;
+  color: var(--color-white);
+  background: linear-gradient(90deg, var(--color-primary1), var(--color-primary2));
+  border: none;
+  border-radius: var(--btn-radius);
+  cursor: pointer;
+  transition: transform 0.2s, background 0.3s;
+}
+
+.connectWalletBtn:hover {
+  transform: scale(1.05);
+  background: linear-gradient(90deg, var(--color-primary2), var(--color-primary1));
+}
+
+.loading {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: var(--fs-md);
+  color: rgba(255, 255, 255, 0.6);
+  margin: var(--space-lg) 0;
+}
+
+.loading::before {
+  content: "";
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid var(--color-primary1);
+  border-top: 3px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-right: var(--space-sm);
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.errorContainer {
+  text-align: center;
+  margin: var(--space-lg) 0;
+}
+
+.error {
+  font-size: var(--fs-md);
+  color: #ff6b6b;
+  margin-bottom: var(--space-sm);
+}
+
+.retryBtn {
+  padding: var(--btn-padding);
+  font-size: var(--fs-md);
+  font-weight: 500;
+  color: var(--color-white);
+  background: linear-gradient(90deg, #ff6b6b, #d9534f);
+  border: none;
+  border-radius: var(--btn-radius);
+  cursor: pointer;
+  transition: transform 0.2s, background 0.3s;
+}
+
+.retryBtn:hover {
+  transform: scale(1.05);
+  background: linear-gradient(90deg, #d9534f, #ff6b6b);
+}
+
+.noMemories {
+  text-align: center;
+  font-size: var(--fs-md);
+  color: rgba(255, 255, 255, 0.6);
+  margin: var(--space-lg) 0;
+}
+
+.memoriesList {
+  display: flex;
+  flex-direction: column;
+  gap: var(--gap-sm);
+  width: 100%;
+}
+
+.memoryItem {
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: var(--btn-radius);
+  padding: var(--space-md);
+  transition: transform 0.2s, background 0.3s;
+}
+
+.memoryItem:hover {
+  transform: translateY(-3px);
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.memoryTitle {
+  font-size: var(--fs-lg);
+  font-weight: 500;
+  color: var(--color-white);
+  margin-bottom: var(--space-sm);
+}
+
+.memoryIpfsHash {
+  font-size: var(--fs-sm);
+  color: rgba(255, 255, 255, 0.6);
+  margin-bottom: var(--space-sm);
+  word-break: break-all;
+}
+
+.ipfsLink {
+  font-size: var(--fs-sm);
+  font-weight: 500;
+  color: var(--color-primary1);
+  text-decoration: none;
+  transition: color 0.3s;
+}
+
+.ipfsLink:hover {
+  color: var(--color-primary2);
+  text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+  .container {
+    padding: var(--space-md);
+  }
+
+  .title {
+    font-size: var(--fs-lg);
+  }
+
+  .connectWalletBtn,
+  .retryBtn {
+    font-size: var(--fs-sm);
+    padding: var(--space-sm) var(--space-md);
+  }
+
+  .memoryItem {
+    padding: var(--space-sm);
+  }
+
+  .memoryTitle {
+    font-size: var(--fs-md);
+  }
+
+  .memoryIpfsHash,
+  .ipfsLink {
+    font-size: var(--fs-xs);
+  }
+}

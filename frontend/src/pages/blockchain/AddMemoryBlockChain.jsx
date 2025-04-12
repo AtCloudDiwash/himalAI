@@ -4,17 +4,13 @@ import { ethers } from "ethers";
 import { motion } from "framer-motion";
 import axios from "axios";
 import styles from "./AddMemoryBlockchain.module.css";
-import { useBlockchainContext } from "../../context/BlockchainContext";
 
-// Pinata credentials from .env
 const apiKey = import.meta.env.VITE_PINATA_API_KEY;
 const secretKey = import.meta.env.VITE_PINATA_SECRET_KEY;
-
-// Smart contract details
 const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS;
+
 const contractABI = [
-  "function storeMemory(string memory title, string memory mediaHash) public",
-  "function getMemories(address user) public view returns (string[] memory titles, string[] memory mediaHashes)",
+  "function storeMemory(string memory title, string memory ipfsHash, string memory timestamp) public",
 ];
 
 const AddMemoryBlockchain = () => {
@@ -23,51 +19,33 @@ const AddMemoryBlockchain = () => {
   const [account, setAccount] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-  const [isError, setIsError] = useState(false); // State for error message
+  const [isError, setIsError] = useState(false);
   const navigate = useNavigate();
-  const { blockchainMode } = useBlockchainContext();
-
-  useEffect(() => {
-    if (!blockchainMode) {
-      navigate("/addmemory");
-    }
-  }, [blockchainMode, navigate]);
 
   useEffect(() => {
     const connectWallet = async () => {
-      if (window.ethereum) {
-        try {
-          const accounts = await window.ethereum.request({
-            method: "eth_requestAccounts",
-          });
-          setAccount(accounts[0]);
-        } catch (error) {
-          console.error("MetaMask error:", error);
-          alert("Please connect to MetaMask.");
-        }
-      } else {
-        alert("MetaMask is not installed.");
+      if (!window.ethereum) return alert("MetaMask is not installed");
+      try {
+        const provider = new ethers.BrowserProvider(window.ethereum);
+        const accounts = await provider.send("eth_requestAccounts", []);
+        setAccount(accounts[0]);
+      } catch (error) {
+        alert("Failed to connect wallet");
       }
     };
     connectWallet();
   }, []);
 
   const handleMediaChange = (e) => {
-    const file = e.target.files[0];
-    setMediaFile(file);
+    setMediaFile(e.target.files[0]);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (!title || !mediaFile || !account) return;
 
-    if (!title || !mediaFile) {
-      alert("Please fill in all fields.");
-      return;
-    }
-
+    setIsLoading(true);
     try {
-      setIsLoading(true);
-
       const formData = new FormData();
       formData.append("file", mediaFile);
 
@@ -76,14 +54,14 @@ const AddMemoryBlockchain = () => {
         formData,
         {
           headers: {
-            "Content-Type": "multipart/form-data",
             pinata_api_key: apiKey,
             pinata_secret_api_key: secretKey,
           },
         }
       );
 
-      const mediaHash = response.data.IpfsHash;
+      const ipfsHash = response.data.IpfsHash;
+      const timestamp = new Date().toISOString().slice(0, 19).replace("T", " ");
 
       const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
@@ -93,34 +71,17 @@ const AddMemoryBlockchain = () => {
         signer
       );
 
-      const tx = await contract.storeMemory(title, mediaHash);
+      const tx = await contract.storeMemory(title, ipfsHash, timestamp);
       await tx.wait();
 
-      setIsLoading(false);
       setIsSuccess(true);
-
-      setTimeout(() => {
-        setIsSuccess(false);
-        navigate("/addblock");
-      }, 1500); // 1.5 seconds
+      setTimeout(() => navigate("/addblock"), 1500);
     } catch (error) {
-      console.error("Error:", error);
+      setIsError(true);
+      setTimeout(() => setIsError(false), 1500);
+    } finally {
       setIsLoading(false);
-      setIsError(true); 
-
-      setTimeout(() => {
-        setIsError(false);
-      }, 1500); 
     }
-  };
-
-  const containerVariants = {
-    hidden: { opacity: 0, y: 50 },
-    visible: {
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.5, ease: "easeInOut" },
-    },
   };
 
   const buttonVariants = {
@@ -128,54 +89,20 @@ const AddMemoryBlockchain = () => {
     tap: { scale: 0.95 },
   };
 
-  const loaderVariants = {
-    hidden: { opacity: 0 },
-    visible: { opacity: 1, transition: { duration: 0.3 } },
-  };
-
-  const successVariants = {
-    hidden: { opacity: 0, scale: 0.8 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: { duration: 0.3, ease: "easeOut" },
-    },
-    exit: { opacity: 0, scale: 0.8, transition: { duration: 0.3 } },
-  };
-
-  const errorVariants = {
-    hidden: { opacity: 0, scale: 0.8 },
-    visible: {
-      opacity: 1,
-      scale: 1,
-      transition: { duration: 0.3, ease: "easeOut" },
-    },
-    exit: { opacity: 0, scale: 0.8, transition: { duration: 0.3 } },
-  };
-
   return (
     <div className={styles.addMemoryBlockchainWrapper}>
       <motion.div
         className={styles.addMemoryBlockchain}
-        variants={containerVariants}
-        initial="hidden"
-        animate="visible"
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
       >
-        <motion.h1
-          className={styles.title}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.2, duration: 0.5 }}
-        >
-          Add Memory (Blockchain)
-        </motion.h1>
-
+        <h1 className={styles.title}>Add Memory</h1>
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.formGroup}>
             <label htmlFor="title" className={styles.label}>
               Title
             </label>
-            <motion.input
+            <input
               type="text"
               id="title"
               value={title}
@@ -183,10 +110,8 @@ const AddMemoryBlockchain = () => {
               className={styles.input}
               placeholder="Enter memory title"
               required
-              whileFocus={{ borderColor: "var(--color-primary1)" }}
             />
           </div>
-
           <div className={styles.formGroup}>
             <label htmlFor="media" className={styles.label}>
               Add Media (Only single file)
@@ -207,22 +132,12 @@ const AddMemoryBlockchain = () => {
                 className={styles.hiddenInput}
               />
             </motion.label>
-            {mediaFile && (
-              <motion.p
-                className={styles.fileName}
-                initial={{ opacity: 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ duration: 0.3 }}
-              >
-                Selected: {mediaFile.name}
-              </motion.p>
-            )}
+            {mediaFile && <p className={styles.fileName}>{mediaFile.name}</p>}
           </div>
-
           <motion.button
             type="submit"
             className={styles.submitBtn}
-            disabled={!account || isLoading}
+            disabled={isLoading || !account}
             variants={buttonVariants}
             whileHover="hover"
             whileTap="tap"
@@ -231,40 +146,32 @@ const AddMemoryBlockchain = () => {
           </motion.button>
         </form>
       </motion.div>
-
       {isLoading && (
         <motion.div
           className={styles.loaderOverlay}
-          variants={loaderVariants}
-          initial="hidden"
-          animate="visible"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
         >
           <div className={styles.loaderSpinner}></div>
           <p>Confirming Transaction...</p>
         </motion.div>
       )}
-
       {isSuccess && (
         <motion.div
           className={styles.successMessage}
-          variants={successVariants}
-          initial="hidden"
-          animate="visible"
-          exit="exit"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
         >
-          <p>Memory Stored Successfully!</p>
+          Memory Stored!
         </motion.div>
       )}
-
       {isError && (
         <motion.div
           className={styles.errorMessage}
-          variants={errorVariants}
-          initial="hidden"
-          animate="visible"
-          exit="exit"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
         >
-          <p>Transaction Failed!</p>
+          Transaction Failed!
         </motion.div>
       )}
     </div>
