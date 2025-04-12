@@ -122,7 +122,7 @@ const handleToggleStorage = () => {
           className={[styles.sidebar__actionBtn, styles.sidebar_explore].join(
             " "
           )}
-        >
+        onClick={() => {navigate("/explore")}}>
           <img src={exploreIcon} alt="explore icon" />
           Explore Memories
         </button>

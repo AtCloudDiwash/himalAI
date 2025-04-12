@@ -9,13 +9,17 @@ import LandingPage from "./landingPage/LandingPage";
 import Signup from "./signup/Signup";
 import Login from "./login/Login";
 import AddMemoryBlockChain from "./blockchain/AddMemoryBlockChain";
+import BlockMemoriesFetch from "./../feature/BlockMemoriesFetch";
+import { useBlockchainContext } from "../context/BlockchainContext"; // 👈 import your context
 
 export default function Dashboard() {
   const location = useLocation();
   const hideNavbarRoutes = ["/", "/signup", "/login"];
   const shouldHideNavbar = hideNavbarRoutes.includes(location.pathname);
   const token = localStorage.getItem("token");
-  const isLoggedIn = Boolean(token); 
+  const isLoggedIn = Boolean(token);
+
+  const { blockchainMode } = useBlockchainContext(); // 👈 get blockchain mode from context
 
   const ProtectedRoute = ({ children }) => {
     return isLoggedIn ? children : <Navigate to="/login" replace />;
@@ -23,10 +27,9 @@ export default function Dashboard() {
 
   return (
     <div className={styles.wrapper}>
-      {/* Only show navbar if NOT on landing or signup */}
       {!shouldHideNavbar && <Navbar />}
 
-      {/* Floating blobs (keep if you want these globally) */}
+      {/* Floating blobs */}
       <FloatingBlob
         top="0%"
         left="80%"
@@ -48,13 +51,13 @@ export default function Dashboard() {
         size="350px"
         backgroundColor="#EC36C4"
       />
-  
+
       <Routes>
         <Route
           path="/addmemory"
           element={
             <ProtectedRoute>
-              <AddMemory />
+              {blockchainMode ? <AddMemoryBlockChain /> : <AddMemory />}
             </ProtectedRoute>
           }
         />
@@ -62,6 +65,7 @@ export default function Dashboard() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/addblock" element={<AddMemoryBlockChain />} />
+        <Route path="/explore" element={<BlockMemoriesFetch/>} />
       </Routes>
     </div>
   );
