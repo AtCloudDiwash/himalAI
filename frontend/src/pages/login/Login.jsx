@@ -36,7 +36,7 @@ export default function Login() {
 
   return (
     <div className={styles.authPage}>
-      <h1 className={styles.titleHome} onClick={()=>navigate("/landing")}>MemoryVault</h1>
+      <h1 className={styles.titleHome} onClick={()=>navigate("/")}>MemoryVault</h1>
       <div className={styles.card}>
 
         <h2 className={styles.title}>Welcome Back To,</h2>
