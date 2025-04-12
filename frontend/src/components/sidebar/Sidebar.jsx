@@ -80,7 +80,7 @@ const {
 
 const handleToggleStorage = () => {
   setIsBlockchainMode(); // Call the context function directly
-  navigate("/");
+  navigate("/addblock");
 };
 
   

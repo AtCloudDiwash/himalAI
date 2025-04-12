@@ -1,3 +1,9 @@
+
+.addMemoryBlockchainWrapper {
+  position: relative;
+  min-height: 100vh;
+}
+
 .addMemoryBlockchain {
   min-height: 100vh;
   display: flex;
@@ -60,8 +66,32 @@
   color: rgba(255, 255, 255, 0.5);
 }
 
-.input[type="file"] {
-  padding: var(--space-sm);
+.hiddenInput {
+  display: none;
+}
+
+.uploadBtn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(90deg, var(--color-primary1), var(--color-primary2));
+  color: var(--color-white);
+  padding: var(--btn-padding);
+  border-radius: var(--btn-radius);
+  font-size: var(--fs-md);
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.3s;
+}
+
+.uploadBtn:hover {
+  background: linear-gradient(90deg, var(--color-primary2), var(--color-primary1));
+}
+
+.fileName {
+  font-size: var(--fs-sm);
+  color: rgba(255, 255, 255, 0.7);
+  margin-top: var(--space-xs);
 }
 
 .submitBtn {
@@ -87,7 +117,81 @@
   transform: none;
 }
 
-/* Responsive adjustments */
+
+.loaderOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.8);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  color: var(--color-white);
+  font-family: var(--ff-Nunito);
+}
+
+.loaderSpinner {
+  width: 40px;
+  height: 40px;
+  border: 4px solid var(--color-primary1);
+  border-top: 4px solid transparent;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+  margin-bottom: var(--space-sm);
+}
+
+.loaderOverlay p {
+  font-size: var(--fs-md);
+  font-weight: 500;
+}
+
+
+.successMessage {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  padding: var(--space-md);
+  border-radius: var(--btn-radius);
+  color: var(--color-white);
+  font-family: var(--ff-Nunito);
+  font-size: var(--fs-md);
+  font-weight: 600;
+  z-index: 1001;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+
+.errorMessage {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: rgba(255, 0, 0, 0.2); 
+  backdrop-filter: blur(10px);
+  padding: var(--space-md);
+  border-radius: var(--btn-radius);
+  color: #ff4d4d; 
+  font-family: var(--ff-Nunito);
+  font-size: var(--fs-md);
+  font-weight: 600;
+  z-index: 1001;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+}
+
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+
 @media (max-width: 768px) {
   .title {
     font-size: var(--fs-lg);
@@ -98,7 +202,8 @@
     max-width: 90%;
   }
 
-  .submitBtn {
+  .submitBtn,
+  .uploadBtn {
     width: 100%;
   }
 }
@@ -117,6 +222,10 @@
   }
 
   .label {
+    font-size: var(--fs-sm);
+  }
+
+  .uploadBtn {
     font-size: var(--fs-sm);
   }
 }
