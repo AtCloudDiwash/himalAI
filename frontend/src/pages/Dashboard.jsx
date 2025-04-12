@@ -12,7 +12,7 @@ import AddMemoryBlockChain from "./blockchain/AddMemoryBlockChain";
 
 export default function Dashboard() {
   const location = useLocation();
-  const hideNavbarRoutes = ["/landing", "/signup", "/login"];
+  const hideNavbarRoutes = ["/", "/signup", "/login"];
   const shouldHideNavbar = hideNavbarRoutes.includes(location.pathname);
   const token = localStorage.getItem("token");
   const isLoggedIn = Boolean(token); 
@@ -58,7 +58,7 @@ export default function Dashboard() {
             </ProtectedRoute>
           }
         />
-        <Route path="/landing" element={<LandingPage />} />
+        <Route path="/" element={<LandingPage />} />
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/addblock" element={<AddMemoryBlockChain />} />
