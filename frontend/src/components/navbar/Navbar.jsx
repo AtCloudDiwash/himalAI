@@ -15,6 +15,13 @@ export default function Navbar() {
 
   const navigate = useNavigate();
 
+  const handleLogout = () => {
+
+    localStorage.removeItem("token");
+  
+    navigate("/");
+  };
+
   return (
     <>
       <nav className={styles.navbar}>
@@ -25,9 +32,9 @@ export default function Navbar() {
           <h1 className={styles.title} onClick={()=>navigate("/")}>MemoryVault</h1>
         </div>
         <div className={styles.rightSection}>
-          <span className={styles.helpText}>Help</span>
+          
           <div className={styles.avatar}>
-            <img src={userDefaultAvatar} alt="user-avatar" />
+            <button onClick={handleLogout}>Logout</button>
           </div>
         </div>
       </nav>
