@@ -5,7 +5,6 @@ const userSchema = new mongoose.Schema(
     username: {
       type: String,
       required: true,
-      unique: true,
       trim: true,
       minlength: 3,
       maxlength: 30, 
@@ -14,7 +13,6 @@ const userSchema = new mongoose.Schema(
     email: {
       type: String,
       required: true,
-      unique: true,
       trim: true,
       lowercase: true,
       maxlength: 100, 
@@ -37,8 +35,8 @@ const userSchema = new mongoose.Schema(
   }
 );
 
-// Indexes for common queries
-userSchema.index({ email: 1 });
-userSchema.index({ username: 1 }); 
+
+userSchema.index({ email: 1 }, {unique: true},);
+userSchema.index({ username: 1 }, {unique: true}); 
 
 module.exports = mongoose.model("User", userSchema);
