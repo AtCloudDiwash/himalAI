@@ -1,54 +1,60 @@
 const mongoose = require("mongoose");
 
-const memorySchema = new mongoose.Schema({
-  title: {
-    type: String,
-    required: [true, "Title is required"],
-    trim: true,
-    maxlength: [100, "Title cannot exceed 100 characters"],
-  },
-  date: {
-    type: Date,
-    required: [true, "Date is required"],
-  },
-  description: {
-    type: String,
-    required: [true, "Description is required"],
-    trim: true,
-    maxlength: [1000, "Description cannot exceed 1000 characters"],
-  },
-  media: [
-    {
-      url: {
-        type: String,
-        required: true,
-      },
-      type: {
-        type: String,
-        enum: ["image"],
-        required: true,
-      },
-      publicId: {
-        type: String,
-        required: true,
-      },
-      originalName: String,
-      size: Number,
-      uploadedAt: {
-        type: Date,
-        default: Date.now,
+const memorySchema = new mongoose.Schema(
+  {
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User",
+      required: true,
+      index: true, 
+    },
+    title: {
+      type: String,
+      required: true,
+      trim: true,
+      minlength: 1,
+      maxlength: 100,
+    },
+    date: {
+      type: Date,
+      required: true,
+      index: true,
+    },
+    description: {
+      type: String,
+      trim: true,
+      maxlength: 1000, 
+      default: "",
+    },
+    media: {
+      type: [
+        {
+          path: {
+            type: String,
+            required: true,
+            trim: true,
+          },
+          type: {
+            type: String,
+            enum: ["image", "video", "audio", "text"],
+            required: true,
+          },
+        },
+      ],
+      default: [],
+      validate: {
+        validator: (media) => media.length <= 6,
+        message: "Maximum 6 media files allowed per memory",
       },
     },
-  ],
-  user: {
-    type: mongoose.Schema.Types.ObjectId,
-    ref: "User",
-    required: true,
   },
-  createdAt: {
-    type: Date,
-    default: Date.now,
-  },
-});
+  {
+    timestamps: true,
+    toJSON: { virtuals: false },
+  }
+);
+
+// Compound index for common queries
+memorySchema.index({ user: 1, date: -1 });
 
 module.exports = mongoose.model("Memory", memorySchema);
