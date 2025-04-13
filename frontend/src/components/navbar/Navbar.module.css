@@ -60,9 +60,15 @@
   letter-spacing: 1px;
 }
 
-.avatar img {
-  width: clamp(2rem, 3vw, 3.5rem);
-  height: clamp(2rem, 3vw, 3.5rem);
+.avatar button{
+  padding: var(--btn-padding);
+  border-radius: var(--btn-radius);
+  color: white;
+  font-weight: bold;
+  transition: 0.3s ease;
+  text-decoration: none;
+  border: 2px solid rgba(255, 255, 255, 0.5); 
+  background: transparent;
 }
 
 .toggleIcon {

@@ -209,6 +209,7 @@ function AddMemory({ onClose }) {
   };
 
   const MAX_PREVIEWS = 4;
+  const [mood, setMood] = useState(0);
 
   return (
     <div className={styles.wrapper}>
@@ -264,65 +265,17 @@ function AddMemory({ onClose }) {
             </motion.div>
 
             <motion.div variants={inputVariants} className={styles.formField}>
-              <label>Add Media (Images or Videos)</label>
-              <motion.button
-                type="button"
-                className={styles.uploadButton}
-                onClick={() => fileInputRef.current.click()}
-                whileHover={{ scale: 1.05 }}
-                whileTap={{ scale: 0.95 }}
-              >
-                <img src={uploadIcon} alt="upload icon" /> Upload Media
-              </motion.button>
+              <label htmlFor="mood">Mood: {mood}</label>
               <input
-                type="file"
-                multiple
-                accept="image/*,video/*,audio/*"
-                ref={fileInputRef}
-                onChange={handleMediaUpload}
-                style={{ display: "none" }}
+                type="range"
+                id="mood"
+                name="mood"
+                min="1"
+                max="10"
+                value={mood}
+                onChange={(e) => setMood(parseInt(e.target.value))}
+                className={styles.moodSlider}
               />
-              <div className={styles.mediaPreview}>
-                <AnimatePresence>
-                  {mediaFiles.slice(0, MAX_PREVIEWS).map((media, index) => (
-                    <MediaItem
-                      key={index}
-                      media={media}
-                      index={index}
-                      onRemove={handleRemoveMedia}
-                    />
-                  ))}
-                </AnimatePresence>
-                {mediaFiles.length > MAX_PREVIEWS && (
-                  <p className={styles.moreMedia}>
-                    {`+${mediaFiles.length - MAX_PREVIEWS} more`}
-                  </p>
-                )}
-              </div>
-            </motion.div>
-
-            <motion.div variants={inputVariants} className={styles.formField}>
-              <label>Add Voice Note</label>
-              <div className={styles.voiceNoteWrapper}>
-                <motion.button
-                  type="button"
-                  className={`${styles.recordButton} ${
-                    isRecording ? styles.recording : ""
-                  }`}
-                  onClick={isRecording ? stopRecording : startRecording}
-                  animate={isRecording ? "recording" : ""}
-                  variants={recordButtonVariants}
-                  whileHover={{ scale: 1.05 }}
-                  whileTap={{ scale: 0.95 }}
-                >
-                  {isRecording ? (
-                    <img src={micActiveIcon} alt="mic active icon" />
-                  ) : (
-                    <img src={micIcon} alt="mic icon" />
-                  )}
-                </motion.button>
-                <RecordingTimer isRecording={isRecording} />
-              </div>
             </motion.div>
 
             <div className={styles.formButtons}>

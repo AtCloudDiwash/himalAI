@@ -10,13 +10,32 @@ const secretKey = import.meta.env.VITE_PINATA_SECRET_KEY;
 const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS;
 
 const contractABI = [
-  "function storeMemory(string memory title, string memory ipfsHash, string memory timestamp) public",
+  {
+    inputs: [
+      { name: "_ipfsHash", type: "string" },
+      { name: "_title", type: "string" },
+      { name: "_date", type: "string" },
+      { name: "_mvPoints", type: "uint256" },
+    ],
+    name: "storeData",
+    outputs: [],
+    stateMutability: "nonpayable",
+    type: "function",
+  },
+  {
+    inputs: [{ name: "_user", type: "address" }],
+    name: "getTransactionCounter",
+    outputs: [{ name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
 ];
 
 const AddMemoryBlockchain = () => {
   const [title, setTitle] = useState("");
   const [mediaFile, setMediaFile] = useState(null);
   const [account, setAccount] = useState(null);
+  const [counter, setCounter] = useState(0);
   const [isLoading, setIsLoading] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
   const [isError, setIsError] = useState(false);
@@ -24,11 +43,23 @@ const AddMemoryBlockchain = () => {
 
   useEffect(() => {
     const connectWallet = async () => {
-      if (!window.ethereum) return alert("MetaMask is not installed");
+      if (!window.ethereum) {
+        alert("MetaMask is not installed");
+        return;
+      }
       try {
         const provider = new ethers.BrowserProvider(window.ethereum);
         const accounts = await provider.send("eth_requestAccounts", []);
         setAccount(accounts[0]);
+
+        // Fetch transaction counter
+        const contract = new ethers.Contract(
+          contractAddress,
+          contractABI,
+          provider
+        );
+        const counterValue = await contract.getTransactionCounter(accounts[0]);
+        setCounter(ethers.formatUnits(counterValue, 18)); // Convert from 1e18 scale to decimal
       } catch (error) {
         alert("Failed to connect wallet");
       }
@@ -42,13 +73,16 @@ const AddMemoryBlockchain = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    if (!title || !mediaFile || !account) return;
+    if (!title || !mediaFile || !account) {
+      alert("Please fill all fields and connect wallet");
+      return;
+    }
 
     setIsLoading(true);
     try {
+      // Upload to Pinata
       const formData = new FormData();
       formData.append("file", mediaFile);
-
       const response = await axios.post(
         "https://api.pinata.cloud/pinning/pinFileToIPFS",
         formData,
@@ -62,7 +96,9 @@ const AddMemoryBlockchain = () => {
 
       const ipfsHash = response.data.IpfsHash;
       const timestamp = new Date().toISOString().slice(0, 19).replace("T", " ");
+      const mvPoints = 0; // Default mvPoints, adjust as needed
 
+      // Interact with contract
       const provider = new ethers.BrowserProvider(window.ethereum);
       const signer = await provider.getSigner();
       const contract = new ethers.Contract(
@@ -71,12 +107,17 @@ const AddMemoryBlockchain = () => {
         signer
       );
 
-      const tx = await contract.storeMemory(title, ipfsHash, timestamp);
+      const tx = await contract.storeData(ipfsHash, title, timestamp, mvPoints);
       await tx.wait();
+
+      // Update counter
+      const newCounter = await contract.getTransactionCounter(account);
+      setCounter(ethers.formatUnits(newCounter, 18));
 
       setIsSuccess(true);
       setTimeout(() => navigate("/addblock"), 1500);
     } catch (error) {
+      console.error(error);
       setIsError(true);
       setTimeout(() => setIsError(false), 1500);
     } finally {
@@ -97,6 +138,7 @@ const AddMemoryBlockchain = () => {
         animate={{ opacity: 1 }}
       >
         <h1 className={styles.title}>Add Memory</h1>
+        <p className={styles.counter}>Transaction Counter: {counter}</p>
         <form onSubmit={handleSubmit} className={styles.form}>
           <div className={styles.formGroup}>
             <label htmlFor="title" className={styles.label}>
@@ -114,7 +156,7 @@ const AddMemoryBlockchain = () => {
           </div>
           <div className={styles.formGroup}>
             <label htmlFor="media" className={styles.label}>
-              Add Media (Only single file)
+              Add Media (Single file)
             </label>
             <motion.label
               htmlFor="media"

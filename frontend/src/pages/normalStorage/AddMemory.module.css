@@ -275,3 +275,45 @@
   font-size: var(--fs-sm);
   margin-top: var(--space-sm);
 }
+
+
+
+.moodSlider {
+  width: 100%;
+  height: 8px;
+  appearance: none;
+  background: linear-gradient(90deg, var(--color-primary1), var(--color-primary2));
+  border-radius: 9999px;
+  outline: none;
+  margin-top: 0.5rem;
+  transition: background 0.3s ease;
+}
+
+.moodSlider::-webkit-slider-thumb {
+  appearance: none;
+  width: 18px;
+  height: 18px;
+  background: white;
+  border: 2px solid var(--color-primary1);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.moodSlider::-webkit-slider-thumb:hover {
+  transform: scale(1.2);
+}
+
+.moodSlider::-moz-range-thumb {
+  width: 18px;
+  height: 18px;
+  background: white;
+  border: 2px solid var(--color-primary1);
+  border-radius: 50%;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.moodSlider::-moz-range-thumb:hover {
+  transform: scale(1.2);
+}
