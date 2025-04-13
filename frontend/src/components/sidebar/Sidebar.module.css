@@ -112,6 +112,10 @@
   font-size: var(--fs-xs);
   color: #6B88FF;
   text-decoration: none;
+  background-color: transparent;
+  outline: none;
+  border: none;
+  cursor: pointer;
 }
 
 .sidebar__actions {

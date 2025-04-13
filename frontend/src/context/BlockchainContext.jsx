@@ -9,15 +9,18 @@ export const BlockchainProvider = ({ children }) => {
     setBlockchainMode((prev) => !prev);
   };
 
+  const modeDescription = blockchainMode
+    ? "You are currently in Blockchain Mode."
+    : "You are not in Blockchain Mode.";
+
   return (
     <BlockchainContext.Provider
-      value={{ blockchainMode, updateBlockchainMode }}
+      value={{ blockchainMode, updateBlockchainMode, modeDescription }}
     >
       {children}
     </BlockchainContext.Provider>
   );
 };
-
 
 export const useBlockchainContext = () => {
   return useContext(BlockchainContext);

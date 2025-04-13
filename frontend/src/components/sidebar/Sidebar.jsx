@@ -1,5 +1,3 @@
-
-
 import { motion } from "framer-motion";
 import { memo, useState } from "react"; // Added useState
 import { useNavigate } from "react-router-dom";
@@ -32,58 +30,42 @@ const sidebarVariants = {
   },
 };
 
-
-const RecentMemories = memo(() => (
+const RecentMemories = memo(({ isBlockchainMode, navigate }) => (
   <div className={styles.sidebar__recent}>
-    <span className={styles.sidebar__label}>Recent Memories</span>
-    <div className={styles.sidebar__memoryList}>
-      {[1, 2, 3].map((_, index) => (
-        <div key={index} className={styles.sidebar__memoryItem}>
-          <p className={styles.sidebar__memoryTitle}>Memory Title</p>
-          <p className={styles.sidebar__memoryDate}>Mar 29, 2025</p>
-        </div>
-      ))}
-    </div>
-    <a href="#" className={styles.sidebar__seeAll}>
-      See All
-    </a>
-  </div>
-));
-
-const RecentTransactions = memo(() => (
-  <div className={styles.sidebar__recent}>
-    <span className={styles.sidebar__label}>Recent Transactions</span>
+    <span className={styles.sidebar__label}>
+      {isBlockchainMode ? "Recent Transactions" : "Recent Memories"}
+    </span>
     <div className={styles.sidebar__memoryList}>
       {[1, 2, 3].map((_, index) => (
         <div key={index} className={styles.sidebar__memoryItem}>
           <p className={styles.sidebar__memoryTitle}>
-            Transaction #{index + 1}
+            {isBlockchainMode ? `Transaction #${index + 1}` : "Memory Title"}
           </p>
           <p className={styles.sidebar__memoryDate}>Mar 29, 2025</p>
         </div>
       ))}
     </div>
-    <a href="#" className={styles.sidebar__seeAll}>
+    <button
+      className={styles.sidebar__seeAll}
+      onClick={() => navigate(isBlockchainMode ? "/explore" : "/")}
+    >
       See All
-    </a>
+    </button>
   </div>
 ));
 
 function Sidebar({ onClose }) {
-const {
-  blockchainMode: isBlockchainMode,
-  updateBlockchainMode: setIsBlockchainMode,
-} = useBlockchainContext();
+  const {
+    blockchainMode: isBlockchainMode,
+    updateBlockchainMode: setIsBlockchainMode,
+  } = useBlockchainContext();
 
   const navigate = useNavigate();
-  // const [isBlockchainMode, setIsBlockchainMode] = useState(false); 
 
-const handleToggleStorage = () => {
-  setIsBlockchainMode(); // Call the context function directly
-  navigate("/addblock");
-};
-
-  
+  const handleToggleStorage = () => {
+    setIsBlockchainMode(); // Call the context function directly
+    navigate("/addblock");
+  };
 
   return (
     <motion.aside
@@ -93,7 +75,6 @@ const handleToggleStorage = () => {
       exit="exit"
       variants={sidebarVariants}
     >
-
       <div className={styles.sidebar__top}>
         <img
           src={sidePanelClose}
@@ -107,22 +88,26 @@ const handleToggleStorage = () => {
       <div className={styles.sidebar__add}>
         <button
           className={styles.sidebar__addBtn}
-          onClick={() => {!isBlockchainMode?navigate("/addmemory"):navigate("/addblock")}}
+          onClick={() =>
+            !isBlockchainMode ? navigate("/addmemory") : navigate("/addblock")
+          }
         >
           <img src={addIcon} alt="plus icon" />
           Add Your Memory
         </button>
       </div>
 
-
-      {isBlockchainMode ? <RecentTransactions /> : <RecentMemories />}
+      <RecentMemories isBlockchainMode={isBlockchainMode} navigate={navigate} />
 
       <div className={styles.sidebar__actions}>
         <button
           className={[styles.sidebar__actionBtn, styles.sidebar_explore].join(
             " "
           )}
-        onClick={() => {navigate("/explore")}}>
+          onClick={() => {
+            navigate("/explore");
+          }}
+        >
           <img src={exploreIcon} alt="explore icon" />
           Explore Memories
         </button>
@@ -140,7 +125,6 @@ const handleToggleStorage = () => {
         )}
       </div>
 
-    
       <div className={styles.sidebar__footer}>
         <button
           className={styles.sidebar__blockchainBtn}

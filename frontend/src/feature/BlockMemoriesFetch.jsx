@@ -5,14 +5,37 @@ import styles from "./BlockMemoriesFetch.module.css";
 const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS;
 
 const contractABI = [
-  "function storeMemory(string calldata title, string calldata ipfsHash, string calldata timestamp) external",
-  "function getMemories(address user) external view returns (string[] memory titles, string[] memory ipfsHashes, string[] memory timestamps)",
-  "event MemoryStored(address indexed user, string title, string ipfsHash, string timestamp)",
+  {
+    inputs: [{ name: "_user", type: "address" }],
+    name: "getAllUserData",
+    outputs: [
+      {
+        components: [
+          { name: "ipfsHash", type: "string" },
+          { name: "title", type: "string" },
+          { name: "date", type: "string" },
+          { name: "mvPoints", type: "uint256" },
+        ],
+        name: "",
+        type: "tuple[]",
+      },
+    ],
+    stateMutability: "view",
+    type: "function",
+  },
+  {
+    inputs: [{ name: "_user", type: "address" }],
+    name: "getTransactionCounter",
+    outputs: [{ name: "", type: "uint256" }],
+    stateMutability: "view",
+    type: "function",
+  },
 ];
 
 const BlockMemoriesFetch = () => {
   const [account, setAccount] = useState(null);
   const [memories, setMemories] = useState([]);
+  const [counter, setCounter] = useState(0);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
 
@@ -44,16 +67,20 @@ const BlockMemoriesFetch = () => {
         contractABI,
         provider
       );
-      const [titles, ipfsHashes, timestamps] = await contract.getMemories(
-        account
-      );
 
-      const formattedMemories = titles.map((title, index) => ({
-        title,
-        ipfsHash: ipfsHashes[index],
-        timestamp: timestamps[index],
-        ipfsUrl: `https://ipfs.io/ipfs/${ipfsHashes[index]}`,
+      // Fetch memories
+      const data = await contract.getAllUserData(account);
+      const formattedMemories = data.map((item) => ({
+        title: item.title,
+        ipfsHash: item.ipfsHash,
+        timestamp: item.date,
+        mvPoints: ethers.formatUnits(item.mvPoints, 0), // Convert uint256 to string
+        ipfsUrl: `https://ipfs.io/ipfs/${item.ipfsHash}`,
       }));
+
+      // Fetch transaction counter
+      const counterValue = await contract.getTransactionCounter(account);
+      setCounter(ethers.formatUnits(counterValue, 18)); // Convert from 1e18 to decimal
 
       setMemories(formattedMemories);
     } catch (err) {
@@ -76,6 +103,9 @@ const BlockMemoriesFetch = () => {
   return (
     <div className={styles.container}>
       <h2 className={styles.title}>Your Memories</h2>
+      {account && (
+        <p className={styles.counter}>Transaction Counter: {counter}</p>
+      )}
 
       {!account ? (
         <button onClick={connectWallet} className={styles.connectWalletBtn}>
@@ -99,6 +129,7 @@ const BlockMemoriesFetch = () => {
               <h3 className={styles.memoryTitle}>{memory.title}</h3>
               <p className={styles.memoryIpfsHash}>IPFS: {memory.ipfsHash}</p>
               <p className={styles.memoryTimestamp}>Date: {memory.timestamp}</p>
+              <p className={styles.memoryPoints}>Points: {memory.mvPoints}</p>
               <a
                 href={memory.ipfsUrl}
                 target="_blank"
