@@ -1,0 +1,21 @@
+import os
+from pymongo import MongoClient
+from dotenv import load_dotenv
+load_dotenv()
+
+def get_user_data(user_id):
+    client = MongoClient(os.getenv("MONGO_URI"))
+    db = client["Memory-Vault"]
+    collection = db["moodmemories"]
+    return list(collection.find({"user": user_ref}))
+
+
+
+def make_chunks(user_data):
+    chunks = []
+    for item in user_data:
+        text = f"Title: {item['title']}\nDescription: {item['description']}\nSongs: {', '.join(item['musics'])}"
+        chunks.append(text)
+    return chunks
+
+

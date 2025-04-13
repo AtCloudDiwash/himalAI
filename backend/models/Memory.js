@@ -32,7 +32,7 @@ const moodMemorySchema = new mongoose.Schema(
     },
   },
   {
-    timestamps: true
+    timestamps: true,
   }
 );
 

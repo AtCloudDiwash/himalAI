@@ -31,6 +31,7 @@ const sidebarVariants = {
   },
 };
 
+
 const RecentMemories = memo(({ isBlockchainMode, navigate }) => {
   const [recentMemories, setRecentMemories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -76,6 +77,17 @@ const RecentMemories = memo(({ isBlockchainMode, navigate }) => {
     </div>
   );
 });
+
+/* const RecentMemories = memo(({ isBlockchainMode, navigate, transactions }) => (
+  <div className={styles.sidebar__recent}>
+    <span className={styles.sidebar__label}>
+      {isBlockchainMode
+        ? "Recent Transactions (0.002/step)"
+        : "Recent Memories"}
+    </span>
+  </div>
+)); */
+
 
 function Sidebar({ onClose }) {
   const {
@@ -127,9 +139,11 @@ function Sidebar({ onClose }) {
           className={[styles.sidebar__actionBtn, styles.sidebar_explore].join(
             " "
           )}
+
           onClick={() => {
             navigate("/explore");
           }}
+
         >
           <img src={exploreIcon} alt="explore icon" />
           Explore Memories
