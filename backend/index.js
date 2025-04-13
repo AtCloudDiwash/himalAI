@@ -1,14 +1,14 @@
 const express = require("express");
 const dotenv = require("dotenv");
+dotenv.config();
 const mongoose = require("mongoose");
 
 
 const cors = require("cors");
 
-
 const userRoutes = require("./routes/User.js");
+const memoryRoutes = require("./routes/Memory.js");
 
-dotenv.config();
 
 const app = express();
 
@@ -17,14 +17,15 @@ app.use(express.urlencoded({extended: true}));
 app.use(cors());
 
 app.use("/users",userRoutes);
+app.use("/memories",memoryRoutes);
 
 
-
-mongoose.connect(process.env.MONGODB_URI);
-
-let db = mongoose.connection;
-db.on("error", console.error.bind(console, "Error in the database connection!"));
-db.once("open", ()=> console.log("Now connected to MongoDB Atlas."));
+mongoose.connect(process.env.MONGODB_URI)
+  .then(() => console.log("Connected to MongoDB"))
+  .catch((err) => {
+    console.error("Failed to connect to MongoDB:", err);
+    process.exit(1); 
+  });
 
 
 

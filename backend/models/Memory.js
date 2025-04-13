@@ -1,13 +1,7 @@
 const mongoose = require("mongoose");
 
-const memorySchema = new mongoose.Schema(
+const moodMemorySchema = new mongoose.Schema(
   {
-    user: {
-      type: mongoose.Schema.Types.ObjectId,
-      ref: "User",
-      required: true,
-      index: true, 
-    },
     title: {
       type: String,
       required: true,
@@ -15,37 +9,21 @@ const memorySchema = new mongoose.Schema(
       minlength: 1,
       maxlength: 100,
     },
-    date: {
-      type: Date,
-      required: true,
-      index: true,
-    },
     description: {
       type: String,
       trim: true,
-      maxlength: 1000, 
+      maxlength: 1000,
       default: "",
     },
-    media: {
-      type: [
-        {
-          path: {
-            type: String,
-            required: true,
-            trim: true,
-          },
-          type: {
-            type: String,
-            enum: ["image", "video", "audio", "text"],
-            required: true,
-          },
-        },
-      ],
-      default: [],
-      validate: {
-        validator: (media) => media.length <= 6,
-        message: "Maximum 6 media files allowed per memory",
-      },
+    date: {
+      type: Date,
+      required: true,
+    },
+    mood: {
+      type: Number,
+      required: true,
+      min: 1, 
+      max: 10, 
     },
   },
   {
@@ -54,7 +32,4 @@ const memorySchema = new mongoose.Schema(
   }
 );
 
-// Compound index for common queries
-memorySchema.index({ user: 1, date: -1 });
-
-module.exports = mongoose.model("Memory", memorySchema);
+module.exports = mongoose.model("MoodMemory", moodMemorySchema);

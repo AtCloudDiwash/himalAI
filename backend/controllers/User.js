@@ -1,11 +1,11 @@
-const User = require("../models/User");
+const User = require("../models/User.js");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
 
-const tokenBlacklist = new Set(); 
+const tokenBlacklist = new Set();
 
 const generateToken = (user) => {
-  return jwt.sign({ _id: user._id }, process.env.JWT_SECRET, { expiresIn: "5s" });
+  return jwt.sign({ _id: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: "1h" });
 };
 
 const signup = async (req, res) => {
@@ -57,21 +57,26 @@ const login = async (req, res) => {
   }
 };
 
-
 const logout = async (req, res) => {
   try {
-    const token = req.token;
-    tokenBlacklist.add(token);
+    let token = req.headers.authorization;
+    if (token && token.startsWith("Bearer ")) {
+      token = token.slice(7, token.length); // Remove "Bearer " prefix
+    }
 
+    if (!token) {
+      return res.status(400).json({ error: "No token provided" });
+    }
+
+    tokenBlacklist.add(token); // Add token to blacklist
     res.status(200).json({ message: "Logout successful" });
   } catch (error) {
     res.status(500).json({ error: "Internal server error" });
   }
 };
 
-
 const isTokenBlacklisted = (token) => {
   return tokenBlacklist.has(token);
 };
 
-module.exports = { signup, login, logout, isTokenBlacklisted };
+module.exports = { signup, login, logout, isTokenBlacklisted, tokenBlacklist };
