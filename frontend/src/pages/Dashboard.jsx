@@ -12,6 +12,7 @@ import AddMemoryBlockChain from "./blockchain/AddMemoryBlockChain";
 import BlockMemoriesFetch from "./../feature/BlockMemoriesFetch";
 import { useBlockchainContext } from "../context/BlockchainContext";
 import AIResponse from "./AIResponse/AIResponse";
+import MemoryLaneChat from "./memoryLane/MemoryLaneChat";
 
 export default function Dashboard() {
   const location = useLocation();
@@ -81,6 +82,7 @@ export default function Dashboard() {
         <Route path="/signup" element={<Signup />} />
         <Route path="/login" element={<Login />} />
         <Route path="/ai" element={<AIResponse />} />
+        <Route path = "/kriyana" element={<MemoryLaneChat/>} />
       </Routes>
     </div>
   );
