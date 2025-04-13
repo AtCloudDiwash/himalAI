@@ -31,7 +31,6 @@ const sidebarVariants = {
   },
 };
 
-
 const RecentMemories = memo(({ isBlockchainMode, navigate }) => {
   const [recentMemories, setRecentMemories] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -78,7 +77,7 @@ const RecentMemories = memo(({ isBlockchainMode, navigate }) => {
   );
 });
 
-/* const RecentMemories = memo(({ isBlockchainMode, navigate, transactions }) => (
+ const RecentTransaction = memo(({ isBlockchainMode, navigate, transactions }) => (
   <div className={styles.sidebar__recent}>
     <span className={styles.sidebar__label}>
       {isBlockchainMode
@@ -86,8 +85,7 @@ const RecentMemories = memo(({ isBlockchainMode, navigate }) => {
         : "Recent Memories"}
     </span>
   </div>
-)); */
-
+)); 
 
 function Sidebar({ onClose }) {
   const {
@@ -132,29 +130,42 @@ function Sidebar({ onClose }) {
         </button>
       </div>
 
-      <RecentMemories isBlockchainMode={isBlockchainMode} navigate={navigate} />
+      {isBlockchainMode ? (
+        <RecentTransaction
+          isBlockchainMode={isBlockchainMode}
+          navigate={navigate}
+    
+        />
+      ) : (
+        <RecentMemories
+          isBlockchainMode={isBlockchainMode}
+          navigate={navigate}
+        />
+      )}
 
       <div className={styles.sidebar__actions}>
         <button
           className={[styles.sidebar__actionBtn, styles.sidebar_explore].join(
             " "
           )}
-
           onClick={() => {
             navigate("/explore");
           }}
-
         >
           <img src={exploreIcon} alt="explore icon" />
           Explore Memories
         </button>
         {!isBlockchainMode && (
           <>
-            <button className={styles.sidebar__actionBtn}>
+            <button
+              className={styles.sidebar__actionBtn}
+              onClick={() => {
+                navigate("/kriyana");
+              }}
+            >
               <img src={clockIcon} alt="clock icon" />
               Use Kriyana
             </button>
-            
           </>
         )}
       </div>
