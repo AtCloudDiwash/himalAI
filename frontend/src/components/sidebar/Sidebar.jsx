@@ -237,13 +237,13 @@ function Sidebar({ onClose }) {
           onClick={() => navigate("/explore")}
         >
           <img src={exploreIcon} alt="explore icon" />
-          Explore Memories
+          User Dashboard
         </button>
         {!isBlockchainMode && (
           <>
-            <button className={styles.sidebar__actionBtn}>
+            <button className={styles.sidebar__actionBtn} onClick={() => navigate("/kriyana")}>
               <img src={clockIcon} alt="clock icon" />
-              Memory Lane
+              Use Chatbot
             </button>
             
           </>
