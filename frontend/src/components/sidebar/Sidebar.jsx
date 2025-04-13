@@ -68,47 +68,6 @@ const RecentMemories = memo(({ isBlockchainMode, navigate, transactions }) => (
         ? "Recent Transactions (0.002/step)"
         : "Recent Memories"}
     </span>
-    <div className={styles.sidebar__memoryList}>
-      {isBlockchainMode && transactions.length > 0 ? (
-        transactions.map((tx, index) => (
-          <div
-            key={index}
-            className={styles.sidebar__memoryItem}
-            onClick={() => navigate(`/explore?index=${tx.index}`)}
-            style={{ cursor: "pointer" }}
-          >
-            <p className={styles.sidebar__memoryTitle}>{tx.title}</p>
-            <p className={styles.sidebar__memoryDate}>
-              {new Date(tx.date).toLocaleDateString("en-US", {
-                month: "short",
-                day: "numeric",
-                year: "numeric",
-              })}
-            </p>
-            <p className={styles.sidebar__memoryPoints}>
-              Points: {tx.mvPoints}
-            </p>
-          </div>
-        ))
-      ) : isBlockchainMode && transactions.length === 0 ? (
-        <p className={styles.sidebar__noData}>
-          No transactions found.{" "}
-          <span
-            className={styles.sidebar__addLink}
-            onClick={() => navigate("/addblock")}
-          >
-            Add one now
-          </span>
-        </p>
-      ) : (
-        [1, 2, 3].map((_, index) => (
-          <div key={index} className={styles.sidebar__memoryItem}>
-            <p className={styles.sidebar__memoryTitle}>Memory Title</p>
-            <p className={styles.sidebar__memoryDate}>Mar 29, 2025</p>
-          </div>
-        ))
-      )}
-    </div>
     <button
       className={styles.sidebar__seeAll}
       onClick={() => navigate(isBlockchainMode ? "/explore" : "/")}
@@ -234,18 +193,20 @@ function Sidebar({ onClose }) {
           className={[styles.sidebar__actionBtn, styles.sidebar_explore].join(
             " "
           )}
-          onClick={() => navigate("/explore")}
+          onClick={() => {isBlockchainMode? navigate("/explore"): navigate("/plainexplore")}}
         >
           <img src={exploreIcon} alt="explore icon" />
-          User Dashboard
+          Explore
         </button>
         {!isBlockchainMode && (
           <>
-            <button className={styles.sidebar__actionBtn} onClick={() => navigate("/kriyana")}>
+            <button
+              className={styles.sidebar__actionBtn}
+              onClick={() => navigate("/kriyana")}
+            >
               <img src={clockIcon} alt="clock icon" />
               Use Chatbot
             </button>
-            
           </>
         )}
       </div>

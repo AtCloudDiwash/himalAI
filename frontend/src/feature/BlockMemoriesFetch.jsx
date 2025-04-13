@@ -68,6 +68,7 @@ const BlockMemoriesFetch = () => {
         provider
       );
 
+  
       // Fetch memories
       const data = await contract.getAllUserData(account);
       const formattedMemories = data.map((item) => ({
@@ -129,7 +130,6 @@ const BlockMemoriesFetch = () => {
               <h3 className={styles.memoryTitle}>{memory.title}</h3>
               <p className={styles.memoryIpfsHash}>IPFS: {memory.ipfsHash}</p>
               <p className={styles.memoryTimestamp}>Date: {memory.timestamp}</p>
-              <p className={styles.memoryPoints}>Points: {memory.mvPoints}</p>
               <a
                 href={memory.ipfsUrl}
                 target="_blank"
