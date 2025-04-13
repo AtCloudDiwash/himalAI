@@ -13,9 +13,9 @@ const {
 
 router.post("/", verify, createMemory);
 router.get("/", verify, getAllMemories);
+router.get("/recent", verify, getRecentMemories);
 router.get("/:id", verify, getMemoryById);
 router.put("/:id", verify, updateMemory);
 router.delete("/:id", verify, deleteMemory);
-router.get("/recent", verify, getRecentMemories);
 
 module.exports = router;
