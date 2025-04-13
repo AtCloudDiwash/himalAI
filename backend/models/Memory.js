@@ -22,13 +22,17 @@ const moodMemorySchema = new mongoose.Schema(
     mood: {
       type: Number,
       required: true,
-      min: 1, 
-      max: 10, 
+      min: 1,
+      max: 10,
+    },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "User", // Reference to the User model
+      required: true,
     },
   },
   {
-    timestamps: true,
-    toJSON: { virtuals: false },
+    timestamps: true
   }
 );
 

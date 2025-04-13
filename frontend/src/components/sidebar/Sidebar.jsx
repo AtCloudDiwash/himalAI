@@ -1,45 +1,16 @@
 import { motion } from "framer-motion";
-import { memo, useState, useEffect } from "react";
+import { memo, useState } from "react"; // Added useState
 import { useNavigate } from "react-router-dom";
-import { ethers } from "ethers";
+import { useEffect } from "react"; // Import useEffect and useState
+import { fetchRecentMemories } from "./RecentMemoriesapi";
 import styles from "./Sidebar.module.css";
 import sidePanelClose from "./../../assets/navbar_assets/left_panel_close.svg";
 import addIcon from "./../../assets/more_icons/add_icon.svg";
 import blockIcon from "./../../assets/more_icons/block_icon.svg";
 import exploreIcon from "./../../assets/more_icons/explore_icon.svg";
-import shareIcon from "./../../assets/more_icons/share_icon.svg";
+import shareIcon from "./../../assets/more_icons/share_button.svg";
 import clockIcon from "./../../assets/more_icons/clock_icon.svg";
 import { useBlockchainContext } from "../../context/BlockchainContext";
-
-const contractAddress = import.meta.env.VITE_CONTRACT_ADDRESS;
-
-const contractABI = [
-  {
-    inputs: [{ name: "_user", type: "address" }],
-    name: "getAllUserData",
-    outputs: [
-      {
-        components: [
-          { name: "ipfsHash", type: "string" },
-          { name: "title", type: "string" },
-          { name: "date", type: "string" },
-          { name: "mvPoints", type: "uint256" },
-        ],
-        name: "",
-        type: "tuple[]",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [{ name: "_user", type: "address" }],
-    name: "getTransactionCounter",
-    outputs: [{ name: "", type: "uint256" }],
-    stateMutability: "view",
-    type: "function",
-  },
-];
 
 const sidebarVariants = {
   hidden: { x: "-100%", opacity: 0 },
@@ -61,93 +32,62 @@ const sidebarVariants = {
   },
 };
 
-const RecentMemories = memo(({ isBlockchainMode, navigate, transactions }) => (
-  <div className={styles.sidebar__recent}>
-    <span className={styles.sidebar__label}>
-      {isBlockchainMode
-        ? "Recent Transactions (0.002/step)"
-        : "Recent Memories"}
-    </span>
-    <button
-      className={styles.sidebar__seeAll}
-      onClick={() => navigate(isBlockchainMode ? "/explore" : "/")}
-    >
-      See All
-    </button>
-  </div>
-));
+const RecentMemories = memo(({ isBlockchainMode, navigate }) => {
+  const [recentMemories, setRecentMemories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const loadRecentMemories = async () => {
+      try {
+        const memories = await fetchRecentMemories();
+        setRecentMemories(memories);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadRecentMemories();
+  }, []);
+
+  if (loading) return <p>Loading recent memories...</p>;
+  if (error) return <p>Error: {error}</p>;
+
+  return (
+    <div className={styles.sidebar__recent}>
+      <span className={styles.sidebar__label}>Recent Memories</span>
+      <div className={styles.sidebar__memoryList}>
+        {recentMemories.map((memory) => (
+          <div key={memory._id} className={styles.sidebar__memoryItem}>
+            <p className={styles.sidebar__memoryTitle}>{memory.title}</p>
+            <p className={styles.sidebar__memoryDate}>
+              {new Date(memory.createdAt).toLocaleDateString()}
+            </p>
+          </div>
+        ))}
+      </div>
+      <button
+        className={styles.sidebar__seeAll}
+        onClick={() => navigate("/explore")}
+      >
+        See All
+      </button>
+    </div>
+  );
+});
 
 function Sidebar({ onClose }) {
   const {
     blockchainMode: isBlockchainMode,
     updateBlockchainMode: setIsBlockchainMode,
-    account,
   } = useBlockchainContext();
-  const [transactions, setTransactions] = useState([]);
-  const [error, setError] = useState(null);
+
   const navigate = useNavigate();
 
-  const connectWallet = async () => {
-    if (!window.ethereum) {
-      setError("MetaMask is not installed");
-      return;
-    }
-    try {
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      const accounts = await provider.send("eth_requestAccounts", []);
-      if (accounts[0] && !account) {
-        setError("Please update wallet in app");
-      }
-    } catch (err) {
-      setError("Failed to connect wallet");
-    }
-  };
-
-  const fetchRecentTransactions = async () => {
-    if (!account || !isBlockchainMode) {
-      setTransactions([]);
-      setError(null);
-      return;
-    }
-
-    try {
-      if (!window.ethereum) throw new Error("MetaMask not installed");
-      const provider = new ethers.BrowserProvider(window.ethereum);
-      const contract = new ethers.Contract(
-        contractAddress,
-        contractABI,
-        provider
-      );
-      const data = await contract.getAllUserData(account);
-
-      const recent = data
-        .slice(-3)
-        .reverse()
-        .map((item, idx) => ({
-          title: item.title,
-          date: item.date,
-          mvPoints: ethers.formatUnits(item.mvPoints, 0), // Whole number
-          index: data.length - 1 - idx, // Store index for navigation
-        }));
-
-      setTransactions(recent);
-      setError(null);
-    } catch (err) {
-      setError("Failed to fetch transactions");
-      setTransactions([]);
-    }
-  };
-
-  useEffect(() => {
-    if (isBlockchainMode && !account) {
-      connectWallet();
-    } else {
-      fetchRecentTransactions();
-    }
-  }, [account, isBlockchainMode]);
-
   const handleToggleStorage = () => {
-    setIsBlockchainMode(!isBlockchainMode);
+    setIsBlockchainMode(); // Call the context function directly
     navigate("/addblock");
   };
 
@@ -181,32 +121,27 @@ function Sidebar({ onClose }) {
         </button>
       </div>
 
-      {error && <p className={styles.sidebar__error}>{error}</p>}
-      <RecentMemories
-        isBlockchainMode={isBlockchainMode}
-        navigate={navigate}
-        transactions={transactions}
-      />
+      <RecentMemories isBlockchainMode={isBlockchainMode} navigate={navigate} />
 
       <div className={styles.sidebar__actions}>
         <button
           className={[styles.sidebar__actionBtn, styles.sidebar_explore].join(
             " "
           )}
-          onClick={() => {isBlockchainMode? navigate("/explore"): navigate("/plainexplore")}}
+          onClick={() => {
+            navigate("/explore");
+          }}
         >
           <img src={exploreIcon} alt="explore icon" />
-          Explore
+          Explore Memories
         </button>
         {!isBlockchainMode && (
           <>
-            <button
-              className={styles.sidebar__actionBtn}
-              onClick={() => navigate("/kriyana")}
-            >
+            <button className={styles.sidebar__actionBtn}>
               <img src={clockIcon} alt="clock icon" />
-              Use Chatbot
+              Memory Lane
             </button>
+            
           </>
         )}
       </div>
