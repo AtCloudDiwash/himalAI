@@ -7,6 +7,7 @@ import uploadIcon from "./../../assets/more_icons/upload_icon.svg";
 import crossIcon from "./../../assets/more_icons/cross_icon.svg";
 import micIcon from "./../../assets/more_icons/mic_icon.svg";
 import micActiveIcon from "./../../assets/more_icons/mic_active_icon.svg";
+import { useNavigate } from "react-router-dom"; // Import useNavigate
 
 // Separate RecordingTimer component to isolate timer re-renders
 function RecordingTimer({ isRecording }) {
@@ -81,6 +82,7 @@ function AddMemory({ onClose }) {
   const dateInputRef = useRef(null);
   const mediaRecorderRef = useRef(null);
   const audioChunksRef = useRef([]);
+  const navigate = useNavigate(); // Initialize navigate
 
   // Animation variants
   const formVariants = {
@@ -184,11 +186,55 @@ function AddMemory({ onClose }) {
     }
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+
     if (isRecording) stopRecording();
-    mediaFiles.forEach((media) => URL.revokeObjectURL(media.url));
-    onClose();
+
+    // Prepare the memory data
+    const memoryData = {
+      title: document.getElementById("title").value,
+      date: document.getElementById("date").value,
+      description: document.getElementById("description").value,
+      mood,
+    };
+
+    try {
+      // Send the memory data to the backend
+      const token = localStorage.getItem("token");
+      const response = await fetch("http://localhost:3000/memories", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(memoryData),
+      });
+
+      if (response.ok) {
+        const savedMemory = await response.json();
+        console.log("Memory saved successfully:", savedMemory);
+
+        // Reset the form fields
+        document.getElementById("title").value = "";
+        document.getElementById("date").value = "";
+        document.getElementById("description").value = "";
+        setMood(0);
+        setMediaFiles([]);
+
+        // Redirect to the same Add Memory section
+        navigate("/addmemory");
+      } else {
+        const errorData = await response.json();
+        console.error("Error saving memory:", errorData.error);
+        alert("Failed to save memory: " + errorData.error);
+      }
+    } catch (error) {
+      console.error("Error saving memory:", error);
+      alert("An error occurred while saving the memory.");
+    } finally {
+      mediaFiles.forEach((media) => URL.revokeObjectURL(media.url));
+    }
   };
 
   // Cleanup on unmount
