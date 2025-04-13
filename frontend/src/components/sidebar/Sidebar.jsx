@@ -8,7 +8,6 @@ import sidePanelClose from "./../../assets/navbar_assets/left_panel_close.svg";
 import addIcon from "./../../assets/more_icons/add_icon.svg";
 import blockIcon from "./../../assets/more_icons/block_icon.svg";
 import exploreIcon from "./../../assets/more_icons/explore_icon.svg";
-import shareIcon from "./../../assets/more_icons/share_button.svg";
 import clockIcon from "./../../assets/more_icons/clock_icon.svg";
 import { useBlockchainContext } from "../../context/BlockchainContext";
 
@@ -139,7 +138,7 @@ function Sidebar({ onClose }) {
           <>
             <button className={styles.sidebar__actionBtn}>
               <img src={clockIcon} alt="clock icon" />
-              Memory Lane
+              Use Kriyana
             </button>
             
           </>
