@@ -23,20 +23,20 @@ module.exports.verify = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader) {
+    console.log("Authorization header missing");
     return res.status(401).json({ error: "Authorization header missing" });
   }
 
   const token = authHeader.split(" ")[1];
-
-  if (tokenBlacklist.has(token)) {
-    return res.status(401).json({ error: "Token has been invalidated" });
-  }
+  console.log("Token received:", token);
 
   try {
-    const decoded = jwt.verify(token, JWT_SECRET_KEY);
-    req.user = decoded;
+    const decoded = jwt.verify(token, process.env.JWT_SECRET_KEY);
+    console.log("Decoded token:", decoded);
+    req.user = decoded; // Attach user data to the request
     next();
   } catch (err) {
+    console.error("Token verification failed:", err.message);
     return res.status(401).json({ error: "Invalid or expired token" });
   }
 };

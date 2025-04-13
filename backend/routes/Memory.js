@@ -7,6 +7,7 @@ const {
   getMemoryById,
   updateMemory,
   deleteMemory,
+  getRecentMemories,
 } = require("../controllers/Memory.js");
 
 
@@ -15,5 +16,6 @@ router.get("/", verify, getAllMemories);
 router.get("/:id", verify, getMemoryById);
 router.put("/:id", verify, updateMemory);
 router.delete("/:id", verify, deleteMemory);
+router.get("/recent", verify, getRecentMemories);
 
 module.exports = router;

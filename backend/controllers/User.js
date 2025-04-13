@@ -5,7 +5,7 @@ const bcrypt = require("bcrypt");
 const tokenBlacklist = new Set();
 
 const generateToken = (user) => {
-  return jwt.sign({ _id: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: "1h" });
+  return jwt.sign({ id: user._id }, process.env.JWT_SECRET_KEY, { expiresIn: "1h" });
 };
 
 const signup = async (req, res) => {

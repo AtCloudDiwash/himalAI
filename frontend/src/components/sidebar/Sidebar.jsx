@@ -1,6 +1,8 @@
 import { motion } from "framer-motion";
 import { memo, useState } from "react"; // Added useState
 import { useNavigate } from "react-router-dom";
+import { useEffect } from "react"; // Import useEffect and useState
+import { fetchRecentMemories } from "./RecentMemoriesapi";
 import styles from "./Sidebar.module.css";
 import sidePanelClose from "./../../assets/navbar_assets/left_panel_close.svg";
 import addIcon from "./../../assets/more_icons/add_icon.svg";
@@ -30,29 +32,51 @@ const sidebarVariants = {
   },
 };
 
-const RecentMemories = memo(({ isBlockchainMode, navigate }) => (
-  <div className={styles.sidebar__recent}>
-    <span className={styles.sidebar__label}>
-      {isBlockchainMode ? "Recent Transactions" : "Recent Memories"}
-    </span>
-    <div className={styles.sidebar__memoryList}>
-      {[1, 2, 3].map((_, index) => (
-        <div key={index} className={styles.sidebar__memoryItem}>
-          <p className={styles.sidebar__memoryTitle}>
-            {isBlockchainMode ? `Transaction #${index + 1}` : "Memory Title"}
-          </p>
-          <p className={styles.sidebar__memoryDate}>Mar 29, 2025</p>
-        </div>
-      ))}
+const RecentMemories = memo(({ isBlockchainMode, navigate }) => {
+  const [recentMemories, setRecentMemories] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  useEffect(() => {
+    const loadRecentMemories = async () => {
+      try {
+        const memories = await fetchRecentMemories();
+        setRecentMemories(memories);
+      } catch (err) {
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    loadRecentMemories();
+  }, []);
+
+  if (loading) return <p>Loading recent memories...</p>;
+  if (error) return <p>Error: {error}</p>;
+
+  return (
+    <div className={styles.sidebar__recent}>
+      <span className={styles.sidebar__label}>Recent Memories</span>
+      <div className={styles.sidebar__memoryList}>
+        {recentMemories.map((memory) => (
+          <div key={memory._id} className={styles.sidebar__memoryItem}>
+            <p className={styles.sidebar__memoryTitle}>{memory.title}</p>
+            <p className={styles.sidebar__memoryDate}>
+              {new Date(memory.createdAt).toLocaleDateString()}
+            </p>
+          </div>
+        ))}
+      </div>
+      <button
+        className={styles.sidebar__seeAll}
+        onClick={() => navigate("/explore")}
+      >
+        See All
+      </button>
     </div>
-    <button
-      className={styles.sidebar__seeAll}
-      onClick={() => navigate(isBlockchainMode ? "/explore" : "/")}
-    >
-      See All
-    </button>
-  </div>
-));
+  );
+});
 
 function Sidebar({ onClose }) {
   const {
