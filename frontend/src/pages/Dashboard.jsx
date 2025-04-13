@@ -54,18 +54,7 @@ export default function Dashboard() {
       />
 
       <Routes>
-        <Route
-          path="/addmemory"
-          element={
-            <ProtectedRoute>
-              {blockchainMode ? (
-                <Navigate to="/addblock" replace />
-              ) : (
-                <AddMemory />
-              )}
-            </ProtectedRoute>
-          }
-        />
+        <Route path="/addmemory" element={<AddMemory />} />
         <Route
           path="/addblock"
           element={

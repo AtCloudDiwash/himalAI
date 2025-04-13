@@ -245,10 +245,7 @@ function Sidebar({ onClose }) {
               <img src={clockIcon} alt="clock icon" />
               Memory Lane
             </button>
-            <button className={styles.sidebar__actionBtn}>
-              <img src={shareIcon} alt="share icon" />
-              Share Your Lane
-            </button>
+            
           </>
         )}
       </div>

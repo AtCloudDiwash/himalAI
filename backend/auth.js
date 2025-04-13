@@ -5,7 +5,7 @@ const jwt = require("jsonwebtoken");
 const dotenv = require("dotenv");
 dotenv.config();
 
-
+const tokenBlacklist = new Set(); 
 
 module.exports.createAccessToken = (user) => {
   const data = {
@@ -17,32 +17,28 @@ module.exports.createAccessToken = (user) => {
 };
 
 // Verify Token Middleware
+const JWT_SECRET_KEY = process.env.JWT_SECRET_KEY;
+
 module.exports.verify = (req, res, next) => {
-  let token = req.headers.authorization;
+  const authHeader = req.headers.authorization;
 
-  if (!token) {
-    return res.status(401).json({ auth: "Failed. No Token Provided" });
+  if (!authHeader) {
+    return res.status(401).json({ error: "Authorization header missing" });
   }
 
-  if (token.startsWith("Bearer ")) {
-    token = token.slice(7, token.length); 
-  }
+  const token = authHeader.split(" ")[1];
 
   if (tokenBlacklist.has(token)) {
-    return res.status(403).json({ auth: "Failed", message: "Token is blacklisted. Please log in again." });
+    return res.status(401).json({ error: "Token has been invalidated" });
   }
 
-  jwt.verify(token, process.env.JWT_SECRET_KEY, (err, decodedToken) => {
-    if (err) {
-      if (err.name === "TokenExpiredError") {
-        return res.status(401).json({ auth: "Failed", message: "Token has expired. Please log in again." });
-      }
-      return res.status(403).json({ auth: "Failed", message: err.message });
-    }
-
-    req.user = decodedToken; 
+  try {
+    const decoded = jwt.verify(token, JWT_SECRET_KEY);
+    req.user = decoded;
     next();
-  });
+  } catch (err) {
+    return res.status(401).json({ error: "Invalid or expired token" });
+  }
 };
 
 // Global Error Handler Middleware
