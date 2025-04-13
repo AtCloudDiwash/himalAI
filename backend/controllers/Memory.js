@@ -11,6 +11,18 @@ const createMemory = async (req, res) => {
   }
 };
 
+// Get 3 most recent memories
+const getRecentMemories = async (req, res) => {
+  try {
+    const recentMemories = await MoodMemory.find({})
+      .sort({ createdAt: -1 }) 
+      .limit(3); 
+    res.status(200).json(recentMemories);
+  } catch (error) {
+    res.status(500).json({ error: error.message });
+  }
+};
+
 // Get all memories
 const getAllMemories = async (req, res) => {
   try {
@@ -65,6 +77,7 @@ const deleteMemory = async (req, res) => {
 
 module.exports = {
   createMemory,
+  getRecentMemories,
   getAllMemories,
   getMemoryById,
   updateMemory,
