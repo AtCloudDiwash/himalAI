@@ -7,7 +7,6 @@ import sidePanelClose from "./../../assets/navbar_assets/left_panel_close.svg";
 import addIcon from "./../../assets/more_icons/add_icon.svg";
 import blockIcon from "./../../assets/more_icons/block_icon.svg";
 import exploreIcon from "./../../assets/more_icons/explore_icon.svg";
-import shareIcon from "./../../assets/more_icons/share_icon.svg";
 import clockIcon from "./../../assets/more_icons/clock_icon.svg";
 import { useBlockchainContext } from "../../context/BlockchainContext";
 
@@ -68,12 +67,6 @@ const RecentMemories = memo(({ isBlockchainMode, navigate, transactions }) => (
         ? "Recent Transactions (0.002/step)"
         : "Recent Memories"}
     </span>
-    <button
-      className={styles.sidebar__seeAll}
-      onClick={() => navigate(isBlockchainMode ? "/explore" : "/")}
-    >
-      See All
-    </button>
   </div>
 ));
 
@@ -193,7 +186,7 @@ function Sidebar({ onClose }) {
           className={[styles.sidebar__actionBtn, styles.sidebar_explore].join(
             " "
           )}
-          onClick={() => {isBlockchainMode? navigate("/explore"): navigate("/plainexplore")}}
+          onClick={() => navigate("/explore")}
         >
           <img src={exploreIcon} alt="explore icon" />
           Explore
